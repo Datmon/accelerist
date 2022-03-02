@@ -21,6 +21,8 @@
     "jsx": "react"
   },
   "include": [
-    "src"
+    "src",
+    "./node_modules/redux-persist/types",
+    "custom.d.ts"
   ]
 }
