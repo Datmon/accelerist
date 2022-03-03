@@ -25,7 +25,7 @@ type State = ReturnType<typeof reducer>;
 export const rootReducer = (state: State, action: any) => {
   let nextState = state as State | undefined;
 
-  if (action.type === actions.auth.signOut.fulfilled.type) {
+  if (action.type === actions.auth.signOut.type) {
     // How to reset store https://twitter.com/dan_abramov/status/703035591831773184
     nextState = undefined;
   }

@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Field, Form } from 'react-final-form';
 import SwitchButton from '../../components/SwitchButton';
 import LockLogo from '../../assets/svg/lock.svg';
 import LinkedIcon from '../../assets/images/linkedIcon.png';
 import Button from '../../components/Button';
+import {
+  composeValidators,
+  isEmail,
+  minLength,
+  required,
+} from '../../utils/validation';
+import { useAppDispatch } from '../../hooks/redux';
+import { signUp } from '../../api/auth';
+import { auth } from '../../api';
+import { actions } from '../../store';
 
 const Container = styled.div`
   display: flex;
@@ -77,11 +88,30 @@ const Register = () => {
   const navigate = useNavigate();
   const [state, setState] = useState(`signIn`);
   const [showPass, setShowPass] = useState(true);
+  const dispatch = useAppDispatch();
   useEffect(() => {
     if (state === `Login`) {
       navigate(`/login`);
     }
   }, [state]);
+
+  const SignUp = async (data: { email: string; password: string }) => {
+    if (data.email && data.password) {
+      const res: any = await auth.signUp(data.email, data.password);
+      if (res.response) {
+        alert(res.response.data.message);
+      } else {
+        const authRes: any = await dispatch(actions.auth.signIn(data));
+
+        if (authRes.payload.message) {
+          alert(authRes.payload.message);
+        } else {
+          alert(`done`);
+          navigate(`/dashboard`);
+        }
+      }
+    }
+  };
 
   return (
     <Container>
@@ -91,35 +121,55 @@ const Register = () => {
         names={[`Register`, `Login`]}
         setName={(name: string) => setState(name)}
       />
-      <Label style={{ marginTop: `50px` }}>
-        Email
-        <Input type="email" name="Email" />
-      </Label>
-      <Label style={{ marginBottom: `50px` }}>
-        Password
-        <Input
-          type={showPass ? `password` : `text`}
-          name="password"
-          style={{ paddingRight: `60px` }}
-        />
-        <Lock onClick={() => setShowPass(!showPass)}>
-          <img src={LockLogo} alt="LockLogo" />
-        </Lock>
-      </Label>
-      <Par>
-        I agree that by clicking <Span>“Registration”</Span> I accept the{` `}
-        <SpanPolic>Terms Of</SpanPolic>
-      </Par>
-      <Par>
-        <SpanPolic>Service</SpanPolic> and <SpanPolic>Privacy Policy</SpanPolic>
-      </Par>
-      <Button
-        style={{ marginTop: `24px`, marginBottom: `40px` }}
-        onClick={() => {
-          ('');
-        }}
-        text="Registration"
+      <Form
+        onSubmit={SignUp}
+        render={({ handleSubmit }) => (
+          <>
+            <Field name="email" validate={composeValidators(required, isEmail)}>
+              {({ input, meta }) => (
+                <Label style={{ marginTop: `50px` }}>
+                  Email
+                  <Input {...input} {...meta} type="email" name="Email" />
+                </Label>
+              )}
+            </Field>
+            <Field
+              name="password"
+              validate={composeValidators(required, minLength(6))}>
+              {({ input, meta }) => (
+                <Label style={{ marginBottom: `50px` }}>
+                  Password
+                  <Input
+                    {...input}
+                    {...meta}
+                    type={showPass ? `password` : `text`}
+                    name="password"
+                    style={{ paddingRight: `60px` }}
+                  />
+                  <Lock onClick={() => setShowPass(!showPass)}>
+                    <img src={LockLogo} alt="LockLogo" />
+                  </Lock>
+                </Label>
+              )}
+            </Field>
+            <Par>
+              I agree that by clicking <Span>“Registration”</Span> I accept the
+              {` `}
+              <SpanPolic>Terms Of</SpanPolic>
+            </Par>
+            <Par>
+              <SpanPolic>Service</SpanPolic> and{` `}
+              <SpanPolic>Privacy Policy</SpanPolic>
+            </Par>
+            <Button
+              style={{ marginTop: `24px`, marginBottom: `40px` }}
+              onClick={handleSubmit}
+              text="Registration"
+            />
+          </>
+        )}
       />
+
       <Par style={{ marginBottom: `30px` }}>or continue with</Par>
       <Img>
         <img src={LinkedIcon} alt="LinkedIcon" />

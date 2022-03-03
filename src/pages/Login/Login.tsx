@@ -1,11 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { Field, Form } from 'react-final-form';
 import SwitchButton from '../../components/SwitchButton';
 import LockLogo from '../../assets/svg/lock.svg';
 import LinkedIcon from '../../assets/images/linkedIcon.png';
 import Button from '../../components/Button';
 import Checkbox from '../../components/Checkbox/Checkbox';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { actions } from '../../store';
+import {
+  composeValidators,
+  isEmail,
+  minLength,
+  required,
+} from '../../utils/validation';
 
 const Container = styled.div`
   display: flex;
@@ -86,6 +95,7 @@ const InlinePanel = styled.div`
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [state, setState] = useState(`signIn`);
   const [showPass, setShowPass] = useState(true);
   useEffect(() => {
@@ -93,6 +103,17 @@ const Register = () => {
       navigate(`/register`);
     }
   }, [state]);
+
+  const signIn = async (data: { email: string; password: string }) => {
+    const res: any = await dispatch(actions.auth.signIn(data));
+
+    if (res.payload.message) {
+      alert(res.payload.message);
+    } else {
+      alert(`done`);
+      navigate(`/dashboard`);
+    }
+  };
 
   return (
     <Container>
@@ -102,46 +123,58 @@ const Register = () => {
         names={[`Register`, `Login`]}
         setName={(name: string) => setState(name)}
       />
-      <Label style={{ marginTop: `50px` }}>
-        Email
-        <Input type="email" name="Email" />
-      </Label>
-      <Label>
-        Password
-        <Input
-          type={showPass ? `password` : `text`}
-          name="password"
-          style={{ paddingRight: `60px` }}
-        />
-        <Lock onClick={() => setShowPass(!showPass)}>
-          <img src={LockLogo} alt="LockLogo" />
-        </Lock>
-      </Label>
-      <InlinePanel>
-        <Checkbox
-          label="Remember"
-          onClick={() => {
-            ('');
-          }}
-        />
-        <Touchable>
-          <Par style={{ fontSize: `12px` }}>Forgot Password?</Par>
-        </Touchable>
-      </InlinePanel>
-      <Par style={{ marginTop: `50px` }}>
-        I agree that by clicking <Span>“Registration”</Span> I accept the{` `}
-        <SpanPolic>Terms Of</SpanPolic>
-      </Par>
-      <Par>
-        <SpanPolic>Service</SpanPolic> and <SpanPolic>Privacy Policy</SpanPolic>
-      </Par>
-      <Button
-        style={{ marginTop: `24px`, marginBottom: `40px` }}
-        onClick={() => {
-          ('');
-        }}
-        text="Login"
+      <Form
+        onSubmit={signIn}
+        render={({ handleSubmit }) => (
+          <>
+            <Field name="email" validate={composeValidators(required, isEmail)}>
+              {({ input, meta }) => (
+                <Label style={{ marginTop: `50px` }}>
+                  Email
+                  <Input {...input} {...meta} type="email" name="Email" />
+                </Label>
+              )}
+            </Field>
+            <Field
+              name="password"
+              validate={composeValidators(required, minLength(6))}>
+              {({ input, meta }) => (
+                <Label style={{ marginBottom: `20px` }}>
+                  Password
+                  <Input
+                    {...input}
+                    {...meta}
+                    type={showPass ? `password` : `text`}
+                    name="password"
+                    style={{ paddingRight: `60px` }}
+                  />
+                  <Lock onClick={() => setShowPass(!showPass)}>
+                    <img src={LockLogo} alt="LockLogo" />
+                  </Lock>
+                </Label>
+              )}
+            </Field>
+            <InlinePanel>
+              <Checkbox
+                label="Remember"
+                onClick={() => {
+                  ('');
+                }}
+              />
+              <Touchable>
+                <Par style={{ fontSize: `12px` }}>Forgot Password?</Par>
+              </Touchable>
+            </InlinePanel>
+
+            <Button
+              style={{ marginTop: `24px`, marginBottom: `40px` }}
+              onClick={handleSubmit}
+              text="Login"
+            />
+          </>
+        )}
       />
+
       <Par style={{ marginBottom: `30px` }}>or continue with</Par>
       <Touchable>
         <img src={LinkedIcon} alt="LinkedIcon" />

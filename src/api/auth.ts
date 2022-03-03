@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = `https://accelerist.herokuapp.com/api/`;
+const BASE_URL = `https://accelerist.herokuapp.com/api/v1/auth/`;
 
 export const signIn = async (email: string, password: string) => {
   const res = await axios.post(`${BASE_URL}sign_in`, { email, password });

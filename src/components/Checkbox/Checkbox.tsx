@@ -4,9 +4,11 @@ import styled from 'styled-components';
 type Props = { label: string; onClick: () => void };
 
 const Box = styled.input`
+  width: 20px;
+  height: 20px;
   margin-right: 11px;
   border-radius: 3px;
-  border: 1px solid #e8e8e8;
+  border-color: #e8e8e8;
 `;
 const Label = styled.label`
   display: flex;

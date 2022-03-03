@@ -6,8 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import MainLayout from './components/MainLayout/MainLayout';
 import Profile from './pages/Profile';
-import EditProfile from './pages/EditProfile';
 import { selectors } from './store';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   const accessToken = useSelector(selectors.auth.selectAccessToken);
@@ -18,7 +18,7 @@ function App() {
         {accessToken ? (
           <Route path="/" element={<MainLayout />}>
             <Route path="/profile" element={<Profile />} />
-            <Route path="/edit_profile" element={<EditProfile />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Route>
         ) : (
           <Route path="/" element={<AuthLayout />}>

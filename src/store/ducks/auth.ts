@@ -9,6 +9,7 @@ import { RootState } from '..';
 import { auth } from '../../api';
 
 const setAccessToken = createAction<string>(`auth/setAccessToken`);
+const signOut = createAction(`auth/signOut`);
 
 const signIn = createAsyncThunk(
   `auth/signIn`,
@@ -45,10 +46,6 @@ const resetPassword = createAsyncThunk(
   },
 );
 
-const signOut = createAsyncThunk(`auth/signOut`, async () => {
-  // return StorageService.removeAssessToken();
-});
-
 interface User {
   email: string;
   accessToken: string;
@@ -62,7 +59,6 @@ export const reducer = createReducer(
   },
   builder => {
     builder.addCase(setAccessToken, (state, action) => {
-      // state.user.access_token = action.payload;
       state.user.accessToken = action.payload;
     });
 
@@ -77,6 +73,10 @@ export const reducer = createReducer(
       .addCase(signIn.rejected, state => {
         state.signingInStatus = `rejected`;
       });
+
+    builder.addCase(signOut, state => {
+      state.user.accessToken = ``;
+    });
   },
 );
 
