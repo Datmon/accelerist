@@ -106,7 +106,6 @@ const Register = () => {
         if (authRes.payload.message) {
           alert(authRes.payload.message);
         } else {
-          alert(`done`);
           navigate(`/dashboard`);
         }
       }
@@ -165,6 +164,7 @@ const Register = () => {
               style={{ marginTop: `24px`, marginBottom: `40px` }}
               onClick={handleSubmit}
               text="Registration"
+              main
             />
           </>
         )}

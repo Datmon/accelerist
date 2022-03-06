@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 import AuthLayout from './components/AuthLayout/AuthLayout';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,6 +12,21 @@ import Dashboard from './pages/Dashboard';
 
 function App() {
   const accessToken = useSelector(selectors.auth.selectAccessToken);
+
+  const setBearer = () => {
+    if (accessToken) {
+      axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+    } else {
+      axios.defaults.headers.common.Authorization = false;
+      /* if setting null does not remove `Authorization` header then try
+          delete axios.defaults.headers.common['Authorization'];
+        */
+    }
+  };
+
+  useEffect(() => {
+    setBearer();
+  }, [accessToken]);
 
   return (
     <Router>
