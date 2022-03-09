@@ -34,6 +34,9 @@ background-color: #CAF0FF;
   &:active {
     opacity: 60%;
   }
+  @media (max-width: 600px) {
+    padding: 9px 36px;
+  }
 `;
 
 const SwitchButton = ({ names, setName, initName }: Props) => {

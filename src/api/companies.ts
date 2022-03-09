@@ -15,3 +15,15 @@ export const getFavorites = async (page: number, limit: number) => {
     .catch(error => error);
   return res;
 };
+
+export const getCompanies = async (page: number, limit: number) => {
+  const res = await axios
+    .get(`${BASE_URL}?page=${page}&limit=${limit}`)
+    .catch(error => error);
+  return res;
+};
+
+export const getCompany = async (id: string) => {
+  const res = await axios.get(`${BASE_URL}${id}`).catch(error => error);
+  return res;
+};

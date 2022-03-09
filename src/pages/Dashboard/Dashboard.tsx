@@ -33,6 +33,7 @@ const Header = styled.header`
   font-weight: 500;
   padding: 0 60px;
 `;
+
 const CardTitle = styled.h2`
   font-size: 24px;
   font-weight: 500;
@@ -222,7 +223,6 @@ const Dashboard = () => {
   return (
     <Body>
       <Header>Dashboard</Header>
-      <Button onClick={getFavorites} text="click" main />
 
       {isLoading ? (
         <div

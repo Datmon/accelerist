@@ -39,10 +39,9 @@ const MainLayout = () => {
         <Links>
           <CustomLink to="/dashboard">Dashboard</CustomLink>
           <CustomLink to="/search">Search</CustomLink>
-          <CustomLink to="/profile">Profile</CustomLink>
           <CustomLink to="/favorites">Favorites</CustomLink>
           <CustomLink to="/prospects">Prospects</CustomLink>
-          <CustomLink to="/servises">Servises</CustomLink>
+          <CustomLink to="/services">Services</CustomLink>
         </Links>
         <Button text="Logout" onClick={logOut} filterBut />
       </Header>

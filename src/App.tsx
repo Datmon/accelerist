@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -9,6 +10,11 @@ import MainLayout from './components/MainLayout/MainLayout';
 import Profile from './pages/Profile';
 import { selectors } from './store';
 import Dashboard from './pages/Dashboard';
+import Search from './pages/Search';
+import List from './pages/Search/Pages/List';
+import Favorites from './pages/Favorites';
+import Prospects from './pages/Prospects';
+import Services from './pages/Services';
 
 function App() {
   const accessToken = useSelector(selectors.auth.selectAccessToken);
@@ -33,8 +39,14 @@ function App() {
       <Routes>
         {accessToken ? (
           <Route path="/" element={<MainLayout />}>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:profileId" element={<Profile />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/prospects" element={<Prospects />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/search" element={<Search />}>
+              <Route index element={<List />} />
+            </Route>
           </Route>
         ) : (
           <Route path="/" element={<AuthLayout />}>

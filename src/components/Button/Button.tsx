@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface IButton {
   main?: boolean;
   filterBut?: boolean;
+  edit?: boolean;
 }
 
 interface Props extends IButton {
@@ -43,6 +44,22 @@ const Container = styled.button`
   margin-right: 6px;
 `}
 
+${(props: IButton) =>
+    props.edit &&
+    `
+  height: fit-content;
+  padding: 9px 37px;
+  width: fit-content;
+  border-radius: 6px;
+  text-align: center;
+  border: 0px;
+  background-color: #CAF0FF;
+  color: #122434;
+  font-weight: 400;
+  font-size: 12px;
+  margin-right: 6px;
+`}
+
   cursor: pointer;
   &:hover {
     opacity: 90%;
@@ -52,13 +69,14 @@ const Container = styled.button`
   }
 `;
 
-const Button = ({ text, onClick, style, main, filterBut }: Props) => {
+const Button = ({ text, onClick, style, main, filterBut, edit }: Props) => {
   return (
     <Container
       style={style}
       onClick={onClick}
       main={main}
-      filterBut={filterBut}>
+      filterBut={filterBut}
+      edit={edit}>
       {text}
     </Container>
   );
